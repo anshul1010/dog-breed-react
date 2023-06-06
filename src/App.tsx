@@ -5,6 +5,8 @@ import { useState, useEffect } from "react";
 import { APIService } from "./service/index";
 import { GET_SORTED_VALUES } from "./utils/constant";
 import BaseSort from "./components/base/BaseSort";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 function App() {
   const [searchValue, setSearchValue] = useState("");
   const [loading, setLoadingState] = useState(false);
@@ -18,10 +20,29 @@ function App() {
   useEffect(() => {
     if (!!searchValue) {
       setLoadingState(true);
-      APIService(`breeds/search?q=${searchValue}`).then((res) => {
-        setSearchResults(res);
-        setLoadingState(false);
-      });
+      APIService(`breeds/search?q=${searchValue}`)
+        .then((res) => {
+          setSearchResults(res);
+          setLoadingState(false);
+          if (res.length === 0) {
+            toast.success("No Matching records found", {
+              position: "top-right",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              draggable: false,
+            });
+          }
+        })
+        .catch((err) => {
+          toast.error(`API Error` + err, {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            draggable: false,
+          });
+        });
     }
   }, [searchValue]);
   useEffect(() => {
@@ -37,6 +58,8 @@ function App() {
         }
       >
         <section>
+          <ToastContainer />
+
           <BaseSearch handleChange={handleChange} />
           <BaseSort sort={sort} onSort={setSort} />
           {loading ? (
