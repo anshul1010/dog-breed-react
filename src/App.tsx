@@ -27,7 +27,7 @@ function App() {
           if (res.length === 0) {
             toast.success("No Matching records found", {
               position: "top-right",
-              autoClose: 5000,
+              autoClose: 2000,
               hideProgressBar: false,
               closeOnClick: true,
               draggable: false,
@@ -37,7 +37,7 @@ function App() {
         .catch((err) => {
           toast.error(`API Error` + err, {
             position: "top-right",
-            autoClose: 5000,
+            autoClose: 2000,
             hideProgressBar: false,
             closeOnClick: true,
             draggable: false,
